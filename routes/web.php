@@ -70,6 +70,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/jam', [\App\Http\Controllers\PresensiJamController::class, 'store'])->name('store');
     });
 
+    // Modul Rekapitulasi & Cetak PDF (Sesuai Hak Akses Role)
+    Route::get('/laporan/rekap', [\App\Http\Controllers\LaporanController::class, 'rekap'])->name('laporan.rekap');
+    Route::get('/laporan/rekap/pdf', [\App\Http\Controllers\LaporanController::class, 'exportPdf'])->name('laporan.rekap.pdf');
+
+    // Modul Grafik Kehadiran Siswa (Siswa, Wali Kelas, Guru Piket, Admin)
+    Route::get('/siswa/grafik', [\App\Http\Controllers\GrafikSiswaController::class, 'show'])->name('siswa.grafik.self');
+    Route::get('/siswa/{id}/grafik', [\App\Http\Controllers\GrafikSiswaController::class, 'show'])->name('siswa.grafik');
+
     // Akses Berkas Bukti Izin Terproteksi (FR-LV-06)
     Route::get('/files/bukti-izin/{izin}', [PrivateFileController::class, 'viewBuktiIzin'])->name('files.bukti-izin');
 });
