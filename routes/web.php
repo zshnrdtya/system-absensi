@@ -58,6 +58,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/approval/{izin}/reject', [IzinApprovalController::class, 'reject'])->name('approval.reject');
     });
 
+    // Modul Presensi Harian (Admin, Wali Kelas, Guru Piket)
+    Route::middleware('role:admin,wali_kelas,guru_piket')->prefix('presensi')->name('presensi.')->group(function () {
+        Route::get('/harian', [\App\Http\Controllers\PresensiHarianController::class, 'index'])->name('harian.index');
+        Route::post('/harian', [\App\Http\Controllers\PresensiHarianController::class, 'store'])->name('harian.store');
+    });
+
+    // Modul Presensi Per Jam Pelajaran (Admin, Guru Mapel, Wali Kelas, Guru Piket)
+    Route::middleware('role:admin,guru_mapel,wali_kelas,guru_piket')->prefix('presensi')->name('presensi.jam.')->group(function () {
+        Route::get('/jam', [\App\Http\Controllers\PresensiJamController::class, 'index'])->name('index');
+        Route::post('/jam', [\App\Http\Controllers\PresensiJamController::class, 'store'])->name('store');
+    });
+
     // Akses Berkas Bukti Izin Terproteksi (FR-LV-06)
     Route::get('/files/bukti-izin/{izin}', [PrivateFileController::class, 'viewBuktiIzin'])->name('files.bukti-izin');
 });
